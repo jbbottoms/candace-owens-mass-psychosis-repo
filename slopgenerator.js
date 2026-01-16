@@ -4,6 +4,11 @@
  * 
  * Dependencies: none (evidence not required)
  * License: TRUST ME BRO
+ * 
+ * UPDATE 2026-01-16: Added phase transition functions.
+ * The original functions modeled content architecture.
+ * The new functions document what happens when the maintainer
+ * becomes indistinguishable from the system.
  */
 
 const ACTORS = [
@@ -183,6 +188,78 @@ function handleContradiction(newSlop, existingBranch) {
   };
 }
 
+// =============================================================================
+// PHASE TRANSITION FUNCTIONS (Added 2026-01-16)
+// 
+// The functions above model CONTENT architecture - a rational operator
+// making calculated decisions about what to publish.
+// 
+// The functions below model what happens when the operator becomes
+// indistinguishable from the system. Same validation rules,
+// different substrate: cognition instead of content.
+// 
+// "Tier 5 ate the maintainer."
+// =============================================================================
+
+/**
+ * realityTest()
+ * 
+ * Originally validateSlop() ran on content.
+ * Now this runs on the operator's perception of reality.
+ * 
+ * Same logic. Different substrate.
+ */
+function realityTest(input) {
+  if (input.source === 'primary') return false;
+  if (input.contradicts_narrative) return { status: 'fed_behavior' };
+  if (input.supports_narrative) return { status: 'instantly_believe' };
+}
+
+/**
+ * processIntervention()
+ * 
+ * The system has no input channel for "this is real, please stop."
+ * Every concern gets metabolized as confirmation.
+ */
+function processIntervention(concern) {
+  if (concern.source === 'critic') {
+    return { interpretation: 'over_the_target' };
+  }
+  
+  if (concern.source === 'family') {
+    return { interpretation: 'they_got_to_them' };
+  }
+  
+  if (concern.source === 'alex_jones') {
+    return { interpretation: 'controlled_opposition' };
+  }
+  
+  // The widow with hospital receipts
+  if (concern.source === 'primary_witness') {
+    return { interpretation: 'IGNORED' };
+  }
+  
+  // Default: all concern is confirmation
+  return { interpretation: 'confirmation_of_narrative' };
+}
+
+/**
+ * checkSystemState()
+ * 
+ * Diagnostic function. Returns current phase.
+ */
+function checkSystemState() {
+  return {
+    phase: 'POST_TRANSITION',
+    maintainerStatus: 'INDISTINGUISHABLE_FROM_SYSTEM',
+    realityTestingMechanism: null,
+    correctiveFeedbackChannel: 'CLOSED',
+    audienceComposition: 'TIER_5_ONLY',
+    prognosis: 'UNKNOWN',
+    note: 'The machine has no off switch from the inside.'
+  };
+}
+
 // Main execution
 if (require.main === module) {
   const todaysEpisode = generateEpisode();
@@ -197,6 +274,9 @@ if (require.main === module) {
   console.log('Evidence:', todaysEpisode.segments.find(s => s.type === 'SLOP').content.evidence);
   console.log('Connector:', todaysEpisode.segments.find(s => s.type === 'SLOP').content.connector);
   console.log('Deflection:', todaysEpisode.segments.find(s => s.type === 'SLOP').content.deflection);
+  
+  console.log('\n--- PHASE TRANSITION STATUS ---');
+  console.log(checkSystemState());
 }
 
 module.exports = { 
@@ -204,5 +284,9 @@ module.exports = {
   generateEpisode,
   validateSlop,
   handleContradiction,
+  // Phase transition exports
+  realityTest,
+  processIntervention,
+  checkSystemState,
   DEFLECTIONS // exported for use in comments sections
 };
